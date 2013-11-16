@@ -43,8 +43,6 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.followTarget = function()
 	{
-		console.log('Enemy refollowing target');
-
 		var x = target.getX();
 		var y = target.getY();
 
@@ -93,6 +91,26 @@ Game.Modules.Enemy = function(_canvas, _image) {
 		context.drawImage(image, 0, 0, enemy_width, enemy_height, coords.x, coords.y, enemy_width, enemy_height);
 
 		checkForTargetHit();
+	};
+
+	this.getX = function()
+	{
+		return coords.x;
+	};
+
+	this.getY = function()
+	{
+		return coords.y;
+	};
+
+	this.getWidth = function()
+	{
+		return enemy_width;
+	};
+
+	this.getHeight = function()
+	{
+		return enemy_height;
 	};
 
 	// -----------------------------------------------------------------------

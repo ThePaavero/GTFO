@@ -5,6 +5,9 @@ Game.Modules.Player = function(_canvas, _image) {
 	var context       = canvas.getContext('2d');
 	var ok_to_get_hit = true;
 
+	var punch_callback;
+	var kick_callback;
+
 	var player_width  = 30;
 	var player_height = 30;
 
@@ -93,6 +96,21 @@ Game.Modules.Player = function(_canvas, _image) {
 	this.getHealth = function()
 	{
 		return player_health;
+	};
+
+	this.getOrientationX = function()
+	{
+		return player_orientation_x;
+	};
+
+	this.setOnPunchCallback = function(callback)
+	{
+		punch_callback = callback;
+	};
+
+	this.setOnKickCallback = function(callback)
+	{
+		kick_callback = callback;
 	};
 
 	// -----------------------------------------------------------------------
@@ -289,6 +307,8 @@ Game.Modules.Player = function(_canvas, _image) {
 		{
 			player_action.punch = false;
 		}, 200);
+
+		punch_callback();
 	};
 
 	var kick = function()
@@ -302,6 +322,8 @@ Game.Modules.Player = function(_canvas, _image) {
 		{
 			player_action.kick = false;
 		}, 350);
+
+		kick_callback();
 	};
 
 };

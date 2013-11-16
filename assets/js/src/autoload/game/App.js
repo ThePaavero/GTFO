@@ -58,7 +58,21 @@ Game.App = function() {
 		}
 
 		resetCanvas();
-		drawCanvas();
+
+		player.onFrame();
+
+		for(var i in enemies)
+		{
+			enemies[i].onFrame();
+		}
+
+		if(player.getHealth() < 1)
+		{
+			gameOver();
+			return false;
+		}
+
+		drawHealth();
 
 		window.game_running = running;
 
@@ -83,31 +97,51 @@ Game.App = function() {
 			running = true;
 			player = new Game.Modules.Player(canvas, getImage('player_sprite'));
 			player.init();
+			player.setOnPunchCallback(playerPunch);
+			player.setOnKickCallback(playerKick);
 		});
+	};
 
+	var playerPunch = function()
+	{
+		//
+	};
+
+	var playerKick = function()
+	{
+		var foot_reach = 10;
+
+		var player_x = player.getX();
+		var player_y = player.getY();
+
+		var player_orientation_x = player.getOrientationX();
+
+		// Any enemies getting hit?
+		for(var i in enemies)
+		{
+			var enemy_x      = enemies[i].getX();
+			var enemy_y      = enemies[i].getY();
+			var enemy_width  = enemies[i].getWidth();
+			var enemy_height = enemies[i].getHeight();
+
+			switch(player_orientation_x)
+			{
+				case 'left':
+					if(((player_x - foot_reach) >= enemy_x && player_x <= (enemy_x + enemy_width)) && (player_y <= enemy_y + enemy_height && player_y >= enemy_y))
+					{
+						console.log('BOOM');
+					}
+					break;
+
+				case 'right':
+					break;
+			}
+		}
 	};
 
 	var resetCanvas = function()
 	{
 		context.clearRect(0, 0, canvas.width, canvas.height);
-	};
-
-	var drawCanvas = function()
-	{
-		player.onFrame();
-
-		for(var i in enemies)
-		{
-			enemies[i].onFrame();
-		}
-
-		if(player.getHealth() < 1)
-		{
-			gameOver();
-			return false;
-		}
-
-		drawHealth();
 	};
 
 	// Stolen from http://stackoverflow.com/a/19775485
