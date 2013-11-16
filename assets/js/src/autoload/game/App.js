@@ -104,7 +104,7 @@ Game.App = function() {
 
 	var playerPunch = function()
 	{
-		//
+		playerKick(); // :P
 	};
 
 	var playerKick = function()
@@ -133,8 +133,8 @@ Game.App = function() {
 				{
 					// die, motherfucker
 					console.log('LOL DEAD');
-					var my_key = enemies.indexOf(enemies[i]);
-					enemies.splice(1, my_key);
+					enemies[i].die();
+					enemies.splice(i, 1);
 				}
 			}
 		}
@@ -214,7 +214,7 @@ Game.App = function() {
 	var gameOver = function()
 	{
 		running = false;
-		alert('GAME OVER LOL');
+		console.log('GAME OVER LOL');
 	};
 
 };

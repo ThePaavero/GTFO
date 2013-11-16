@@ -1,6 +1,7 @@
 Game.Modules.Enemy = function(_canvas, _image) {
 
-	var self = this;
+	var self  = this;
+	var alive = true;
 
 	var canvas        = _canvas;
 	var image         = _image;
@@ -63,7 +64,7 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.onFrame = function()
 	{
-		if(window.game_running === false)
+		if(window.game_running === false || alive === false)
 		{
 			return;
 		}
@@ -123,6 +124,11 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	{
 		health --;
 		return health < 1;
+	};
+
+	this.die = function()
+	{
+		alive = false;
 	};
 
 	// -----------------------------------------------------------------------
