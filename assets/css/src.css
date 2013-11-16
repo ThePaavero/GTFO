@@ -98,9 +98,12 @@ body {
 #game {
   font-family: Arial;
   font-size: 11px;
-  min-height: 350px;
+  width: 900px;
+  height: 350px;
+  margin: 0 auto;
   margin-top: 10%;
-  text-align: center; }
+  text-align: center;
+  box-shadow: 0px 1px 5px -2px #000; }
   #game #fps {
     font-size: 9px;
     opacity: 0.5; }
@@ -108,7 +111,14 @@ body {
     width: 900px;
     height: 350px;
     background: url("../img/concrete.gif") top center no-repeat #434343;
-    margin: 0 auto;
-    box-shadow: 0px 1px 5px -2px #000;
     margin-bottom: 10px;
-    -webkit-filter: blur(0.6px); }
+    -webkit-filter: blur(0.6px);
+    border: solid 2px #fff; }
+  #game .overlay {
+    width: 900px;
+    height: 350px;
+    z-index: 20;
+    position: absolute;
+    background: url("../img/overlay.png");
+    margin: 0 auto;
+    border: solid 2px #fff; }
