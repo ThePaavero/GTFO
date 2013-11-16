@@ -5,12 +5,14 @@ Game.App = function() {
 	var context;
 	var images = [
 		'assets/img/player_sprite.png',
+		'assets/img/enemy_sprite.png',
 		'assets/img/heart.png'
 	];
-	var pixel_size = Game.Settings.pixel_size;
-	var show_fps = true;
+	var pixel_size           = Game.Settings.pixel_size;
+	var show_fps             = true;
 	var enemy_spawn_interval = 5000;
 	var player;
+	var enemies              = [];
 
 	var player_health = 5;
 
@@ -34,9 +36,7 @@ Game.App = function() {
 				if(loaded_images === image_count)
 				{
 					running = true;
-					var player_image = new Image();
-					player_image.src = images[0];
-					player = new Game.Modules.Player(canvas, player_image);
+					player = new Game.Modules.Player(canvas, getImage('player_sprite'));
 					player.init();
 				}
 			};
@@ -78,6 +78,12 @@ Game.App = function() {
 	var drawCanvas = function()
 	{
 		player.onFrame();
+
+		for(var i in enemies)
+		{
+			enemies[i].onFrame();
+		}
+
 		drawHealth();
 	};
 
@@ -124,12 +130,15 @@ Game.App = function() {
 			return;
 		}
 
-		var enemy = new Game.Modules.Enemy();
-		// enemy.spawnRandomOutside();
-		// enemy.locatePlayer();
-		// enemy.followPlayer();
-
 		console.log('Spawning enemy');
+		var enemy = new Game.Modules.Enemy(canvas, getImage('enemy_sprite'));
+		enemy.init();
+
+		enemy.spawnRandomOutside();
+		enemy.setTarget(player);
+		enemy.followTarget();
+
+		enemies.push(enemy);
 	};
 
 	var drawHealth = function()

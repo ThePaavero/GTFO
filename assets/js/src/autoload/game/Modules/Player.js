@@ -82,7 +82,6 @@ Game.Modules.Player = function(_canvas, _image) {
 			return;
 		}
 
-
 		var state = 'idle';
 		var idling = true;
 
