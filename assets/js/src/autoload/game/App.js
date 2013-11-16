@@ -8,7 +8,9 @@ Game.App = function() {
 		'assets/img/player_sprite.png'
 	];
 
-	var pixel_size = 3;
+	var pixel_size    = 3;
+	var player_width  = 30;
+	var player_height = 30;
 
 	var show_fps = true;
 
@@ -105,8 +107,33 @@ Game.App = function() {
 
 	var drawPlayer = function()
 	{
-		var width  = 30;
-		var height = 30;
+		var left_wall = 0;
+		if(player_x < left_wall)
+		{
+			player_x = left_wall;
+			return;
+		}
+
+		var right_wall = canvas.width - player_width;
+		if(player_x > right_wall)
+		{
+			player_x = right_wall;
+			return;
+		}
+
+		var top_wall = 0;
+		if(player_y < top_wall)
+		{
+			player_y = top_wall;
+			return;
+		}
+
+		var bottom_wall = canvas.height - player_height;
+		if(player_y > bottom_wall)
+		{
+			player_y = bottom_wall;
+			return;
+		}
 
 		var state = 'idle';
 
@@ -143,7 +170,7 @@ Game.App = function() {
 			coord_y += 66;
 		}
 
-		context.drawImage(getImage('player_sprite'), coord_x, coord_y, width, height, player_x, player_y, width, height);
+		context.drawImage(getImage('player_sprite'), coord_x, coord_y, player_width, player_height, player_x, player_y, player_width, player_height);
 	};
 
 	// Stolen from http://stackoverflow.com/a/19775485
@@ -211,6 +238,11 @@ Game.App = function() {
 
 	var moveRight = function()
 	{
+		if(player_x > canvas.width)
+		{
+			return;
+		}
+
 		player_move.right = true;
 
 		if(player_orientation_x === 'left')
