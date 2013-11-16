@@ -5,7 +5,8 @@ Game.App = function() {
 	var canvas;
 	var context;
 	var images = [
-		'assets/img/player_sprite.png'
+		'assets/img/player_sprite.png',
+		'assets/img/heart.png'
 	];
 
 	var pixel_size    = 3;
@@ -19,6 +20,8 @@ Game.App = function() {
 		'punch': { x: 76, y: 0 },
 		'kick' : { x: 121, y: 0 }
 	};
+
+	var player_health = 5;
 
 	var player_x = 100;
 	var player_y = 80;
@@ -111,9 +114,7 @@ Game.App = function() {
 	var drawCanvas = function()
 	{
 		drawPlayer();
-
-		// Blur it a bit
-		//
+		drawHealth();
 	};
 
 	var drawPlayer = function()
@@ -368,6 +369,18 @@ Game.App = function() {
 		}
 
 		console.log('Spawning enemy');
+	};
+
+	var drawHealth = function()
+	{
+		var heart_x = 10;
+		var heart_y = 10;
+		var hearts = player_health;
+		while(hearts --)
+		{
+			context.drawImage(getImage('heart'), 0, 0, 28, 28, heart_x, heart_y, player_width, player_height);
+			heart_x += 35;
+		}
 	};
 
 };
