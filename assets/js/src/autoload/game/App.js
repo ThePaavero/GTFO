@@ -109,8 +109,6 @@ Game.App = function() {
 
 	var playerKick = function()
 	{
-		var foot_reach = 10;
-
 		var player_x = player.getX();
 		var player_y = player.getY();
 
@@ -124,19 +122,37 @@ Game.App = function() {
 			var enemy_width  = enemies[i].getWidth();
 			var enemy_height = enemies[i].getHeight();
 
-			var offset = player_orientation_x === 'left' ? -10 : 10;
+			var reach = 20;
 
-			if(((player_x + foot_reach) >= enemy_x && player_x + foot_reach <= (enemy_x + enemy_width)) && (player_y <= enemy_y + enemy_height && player_y >= enemy_y))
+			// Do offset according to player orientation x
+			if(player_orientation_x === 'left')
 			{
-				enemies[i].getHit();
-				if(enemies[i].getHealth() < 1)
-				{
-					// die, motherfucker
-					console.log('LOL DEAD');
-					enemies[i].die();
-					enemies.splice(i, 1);
-				}
+				player_x -= player.getWidth();
 			}
+			else
+			{
+				player_x += player.getWidth();
+			}
+
+			if((player_x >= enemy_x && player_x <= enemy_x + enemy_width) && (player_y >= enemy_y && player_y <= enemy_y + enemy_height))
+			{
+				hitEnemy(enemies[i], i);
+			}
+		}
+	};
+
+	var hitEnemy = function(enemy, key)
+	{
+		enemy.getHit();
+
+		console.log('RIGHT IN THE KISSER');
+
+		if(enemy.getHealth() < 1)
+		{
+			// die, motherfucker
+			console.log('LOL DEAD');
+			enemy.die();
+			enemies.splice(key, 1);
 		}
 	};
 

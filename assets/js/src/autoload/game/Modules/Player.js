@@ -282,10 +282,10 @@ Game.Modules.Player = function(_canvas, _image) {
 
 	var attack = function()
 	{
-		if(player_action.attack === true)
+		/*if(player_action.attack === true)
 		{
 			return false;
-		}
+		}*/
 
 		if(player_move.right || player_move.left || player_move.up || player_move.down)
 		{

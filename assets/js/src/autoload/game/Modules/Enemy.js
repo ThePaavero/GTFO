@@ -124,6 +124,13 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	{
 		health --;
 		return health < 1;
+
+		// Get stunned for a while
+		alive = false;
+		setTimeout(function()
+		{
+			alive = true;
+		}, 300);
 	};
 
 	this.die = function()
