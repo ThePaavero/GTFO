@@ -1,8 +1,9 @@
 window.Game = {};
 
-Game.App     = {};
-Game.Modules = {};
-Game.Helpers = {};
+Game.Settings = {};
+Game.App      = {};
+Game.Modules  = {};
+Game.Helpers  = {};
 
 /**
  * The entire "framework"
