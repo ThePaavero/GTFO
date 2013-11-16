@@ -33,15 +33,19 @@ Game.App = function() {
 	player_orientation_x = 'right';
 	player_orientation_y = 'down';
 
-	player_move = {};
+	var player_move = {};
 	player_move.left  = false;
 	player_move.right = false;
 	player_move.up    = false;
 	player_move.down  = false;
 
-	player_action = {};
+	var player_action = {};
 	player_action.attack = false;
-	blinking = false;
+
+	var blinking = false;
+	var attack_stop_timeout;
+
+	var enemy_spawn_interval = 5000;
 
 	this.init = function()
 	{
@@ -68,6 +72,7 @@ Game.App = function() {
 		}
 
 		doKeys();
+		spawnEnemies();
 	};
 
 	this.setCanvas = function(_canvas)
@@ -95,6 +100,8 @@ Game.App = function() {
 			showFPS(fps);
 		}
 	};
+
+	// -----------------------------------------------------------------------
 
 	var resetCanvas = function()
 	{
@@ -321,10 +328,12 @@ Game.App = function() {
 
 	var punch = function()
 	{
+		clearTimeout(attack_stop_timeout);
+
 		player_action.punch = true;
 		player_x += (player_orientation_x === 'left' ? (pixel_size * 1) : (pixel_size * -3));
 
-		setTimeout(function()
+		attack_stop_timeout = setTimeout(function()
 		{
 			player_action.punch = false;
 		}, 200);
@@ -332,13 +341,30 @@ Game.App = function() {
 
 	var kick = function()
 	{
+		clearTimeout(attack_stop_timeout);
+
 		player_action.kick = true;
 		player_x += (player_orientation_x === 'left' ? (pixel_size * -1) : (pixel_size));
 
-		setTimeout(function()
+		attack_stop_timeout = setTimeout(function()
 		{
 			player_action.kick = false;
 		}, 350);
+	};
+
+	var spawnEnemies = function()
+	{
+		setInterval(spawnEnemy, enemy_spawn_interval);
+	};
+
+	var spawnEnemy = function()
+	{
+		if(running === false)
+		{
+			return;
+		}
+
+		console.log('Spawning enemy');
 	};
 
 };
