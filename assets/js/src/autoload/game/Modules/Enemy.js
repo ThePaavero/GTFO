@@ -5,6 +5,7 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	var canvas        = _canvas;
 	var image         = _image;
 	var context       = canvas.getContext('2d');
+	var health        = 3;
 	var enemy_speed_x = 1;
 	var enemy_speed_y = 1;
 	var enemy_width   = 24;
@@ -111,6 +112,17 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	this.getHeight = function()
 	{
 		return enemy_height;
+	};
+
+	this.getHealth = function()
+	{
+		return health;
+	};
+
+	this.getHit = function()
+	{
+		health --;
+		return health < 1;
 	};
 
 	// -----------------------------------------------------------------------

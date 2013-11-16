@@ -124,17 +124,18 @@ Game.App = function() {
 			var enemy_width  = enemies[i].getWidth();
 			var enemy_height = enemies[i].getHeight();
 
-			switch(player_orientation_x)
-			{
-				case 'left':
-					if(((player_x - foot_reach) >= enemy_x && player_x <= (enemy_x + enemy_width)) && (player_y <= enemy_y + enemy_height && player_y >= enemy_y))
-					{
-						console.log('BOOM');
-					}
-					break;
+			var offset = player_orientation_x === 'left' ? -10 : 10;
 
-				case 'right':
-					break;
+			if(((player_x + foot_reach) >= enemy_x && player_x + foot_reach <= (enemy_x + enemy_width)) && (player_y <= enemy_y + enemy_height && player_y >= enemy_y))
+			{
+				enemies[i].getHit();
+				if(enemies[i].getHealth() < 1)
+				{
+					// die, motherfucker
+					console.log('LOL DEAD');
+					var my_key = enemies.indexOf(enemies[i]);
+					enemies.splice(1, my_key);
+				}
 			}
 		}
 	};
