@@ -1,5 +1,7 @@
 Game.Modules.Enemy = function(_canvas, _image) {
 
+	var self = this;
+
 	var canvas = _canvas;
 	var image = _image;
 	var context = canvas.getContext('2d');
@@ -8,6 +10,8 @@ Game.Modules.Enemy = function(_canvas, _image) {
 		x: 0,
 		y: 0
 	};
+
+	var following_interval = 4000;
 
 	var target;
 
@@ -23,8 +27,6 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 		coords.x = x;
 		coords.y = y;
-
-		console.log(coords);
 	};
 
 	this.setTarget = function(_target)
@@ -34,7 +36,13 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.followTarget = function()
 	{
-		//
+		console.log('Enemy refollowing target');
+		// TODO
+
+		setTimeout(function()
+		{
+			self.followTarget();
+		}, following_interval);
 	};
 
 	this.onFrame = function()
@@ -43,3 +51,5 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	};
 
 };
+
+Game.Modules.Enemy.prototype = Game.Modules.Character.prototype;

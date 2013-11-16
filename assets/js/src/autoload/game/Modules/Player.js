@@ -44,6 +44,7 @@ Game.Modules.Player = function(_canvas, _image) {
 
 	this.init = function()
 	{
+		this.blink();
 		doKeys();
 	};
 
@@ -260,3 +261,5 @@ Game.Modules.Player = function(_canvas, _image) {
 	};
 
 };
+
+Game.Modules.Player.prototype = Game.Modules.Character.prototype;
