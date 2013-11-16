@@ -16,8 +16,8 @@ Game.App = function() {
 
 	var player_coords = {
 		'idle' : { x: 0, y: 0 },
-		'punch' : { x: 66, y: 0 },
-		'kick' : { x: 111, y: 0 }
+		'punch' : { x: 76, y: 0 },
+		'kick' : { x: 121, y: 0 }
 	};
 
 	var player_x = 100;
@@ -41,6 +41,7 @@ Game.App = function() {
 
 	player_action = {};
 	player_action.attack = false;
+	blinking = false;
 
 	this.init = function()
 	{
@@ -135,31 +136,39 @@ Game.App = function() {
 			return;
 		}
 
+
 		var state = 'idle';
+		var idling = true;
 
 		if(player_move.left)
 		{
 			player_x -= player_speed.left;
+			idling = false;
 		}
 		if(player_move.right)
 		{
 			player_x += player_speed.right;
+			idling = false;
 		}
 		if(player_move.up)
 		{
 			player_y -= player_speed.up;
+			idling = false;
 		}
 		if(player_move.down)
 		{
 			player_y += player_speed.down;
+			idling = false;
 		}
 		if(player_action.punch)
 		{
 			state = 'punch';
+			idling = false;
 		}
 		if(player_action.kick)
 		{
 			state = 'kick';
+			idling = false;
 		}
 
 		var coord_x = player_coords[state].x;
@@ -168,6 +177,24 @@ Game.App = function() {
 		if(player_orientation_x === 'right')
 		{
 			coord_y += 66;
+		}
+
+		// Blink?
+		if( ! blinking)
+		{
+			if(state === 'idle' && idling && (Math.round(Math.random() * 100)) === 1)
+			{
+				coord_x = 39;
+				blinking = true;
+				setTimeout(function()
+				{
+					blinking = false;
+				}, 200);
+			}
+		}
+		else
+		{
+			coord_x = 39;
 		}
 
 		context.drawImage(getImage('player_sprite'), coord_x, coord_y, player_width, player_height, player_x, player_y, player_width, player_height);
@@ -206,17 +233,17 @@ Game.App = function() {
 
 	var doKeys = function()
 	{
-		Mousetrap.bind('left', moveLeft, 'keydown');
-		Mousetrap.bind('left', stopLeft, 'keyup');
+		Mousetrap.bind('a', moveLeft, 'keydown');
+		Mousetrap.bind('a', stopLeft, 'keyup');
 
-		Mousetrap.bind('right', moveRight, 'keydown');
-		Mousetrap.bind('right', stopRight, 'keyup');
+		Mousetrap.bind('d', moveRight, 'keydown');
+		Mousetrap.bind('d', stopRight, 'keyup');
 
-		Mousetrap.bind('up', moveUp, 'keydown');
-		Mousetrap.bind('up', stopUp, 'keyup');
+		Mousetrap.bind('w', moveUp, 'keydown');
+		Mousetrap.bind('w', stopUp, 'keyup');
 
-		Mousetrap.bind('down', moveDown, 'keydown');
-		Mousetrap.bind('down', stopDown, 'keyup');
+		Mousetrap.bind('s', moveDown, 'keydown');
+		Mousetrap.bind('s', stopDown, 'keyup');
 
 		Mousetrap.bind('space', attack);
 	};
