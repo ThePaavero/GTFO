@@ -16,7 +16,7 @@ Game.App = function() {
 
 	var player_coords = {
 		'idle' : { x: 0, y: 0 },
-		'punch' : { x: 76, y: 0 },
+		'punch': { x: 76, y: 0 },
 		'kick' : { x: 121, y: 0 }
 	};
 
