@@ -111,6 +111,9 @@ Game.App = function() {
 	var drawCanvas = function()
 	{
 		drawPlayer();
+
+		// Blur it a bit
+		//
 	};
 
 	var drawPlayer = function()
