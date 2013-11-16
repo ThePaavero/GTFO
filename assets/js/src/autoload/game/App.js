@@ -1,16 +1,21 @@
 Game.App = function() {
 
+	var running = false;
+
 	var canvas;
 	var context;
 	var images = [
 		'assets/img/player_sprite.png'
 	];
-	var running = false;
+
+	var pixel_size = 3;
 
 	var show_fps = true;
 
 	var player_coords = {
-		'idle' : { x: 0, y: 0 }
+		'idle' : { x: 0, y: 0 },
+		'punch' : { x: 66, y: 0 },
+		'kick' : { x: 111, y: 0 }
 	};
 
 	var player_x = 100;
@@ -31,6 +36,9 @@ Game.App = function() {
 	player_move.right = false;
 	player_move.up    = false;
 	player_move.down  = false;
+
+	player_action = {};
+	player_action.attack = false;
 
 	this.init = function()
 	{
@@ -118,11 +126,19 @@ Game.App = function() {
 		{
 			player_y += player_speed.down;
 		}
+		if(player_action.punch)
+		{
+			state = 'punch';
+		}
+		if(player_action.kick)
+		{
+			state = 'kick';
+		}
 
 		var coord_x = player_coords[state].x;
 		var coord_y = player_coords[state].y;
 
-		if(player_orientation_x === 'left')
+		if(player_orientation_x === 'right')
 		{
 			coord_y += 66;
 		}
@@ -174,6 +190,8 @@ Game.App = function() {
 
 		Mousetrap.bind('down', moveDown, 'keydown');
 		Mousetrap.bind('down', stopDown, 'keyup');
+
+		Mousetrap.bind('space', attack);
 	};
 
 	var moveLeft = function()
@@ -224,6 +242,44 @@ Game.App = function() {
 	var stopDown = function()
 	{
 		player_move.down = false;
+	};
+
+	var attack = function()
+	{
+		if(player_action.attack === true)
+		{
+			return false;
+		}
+
+		if(player_move.right || player_move.left || player_move.up || player_move.down)
+		{
+			punch();
+			return;
+		}
+
+		kick();
+	};
+
+	var punch = function()
+	{
+		player_action.punch = true;
+		player_x += (player_orientation_x === 'left' ? (pixel_size * 1) : (pixel_size * -3));
+
+		setTimeout(function()
+		{
+			player_action.punch = false;
+		}, 200);
+	};
+
+	var kick = function()
+	{
+		player_action.kick = true;
+		player_x += (player_orientation_x === 'left' ? (pixel_size * -1) : (pixel_size));
+
+		setTimeout(function()
+		{
+			player_action.kick = false;
+		}, 350);
 	};
 
 };
