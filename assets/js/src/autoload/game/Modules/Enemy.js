@@ -81,6 +81,25 @@ Game.Modules.Enemy = function(_canvas, _image) {
 		}
 
 		context.drawImage(image, 0, 0, enemy_width, enemy_height, coords.x, coords.y, enemy_width, enemy_height);
+
+		checkForTargetHit();
+	};
+
+	// -----------------------------------------------------------------------
+
+	var checkForTargetHit = function()
+	{
+		var target_x = target.getX();
+		var target_y = target.getY();
+
+		var my_x = coords.x;
+		var my_y = coords.y;
+
+		if((my_x >= target_x && my_x <= target_x + target.getWidth()) && (my_y >= target_y && my_y <= target_y + target.getHeight()))
+		{
+			console.log('HIT');
+			target.getHit();
+		}
 	};
 
 };

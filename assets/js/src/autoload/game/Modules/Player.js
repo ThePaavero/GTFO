@@ -1,8 +1,9 @@
 Game.Modules.Player = function(_canvas, _image) {
 
-	var canvas = _canvas;
-	var image = _image;
-	var context = canvas.getContext('2d');
+	var canvas        = _canvas;
+	var image         = _image;
+	var context       = canvas.getContext('2d');
+	var ok_to_get_hit = true;
 
 	var player_width  = 30;
 	var player_height = 30;
@@ -62,6 +63,39 @@ Game.Modules.Player = function(_canvas, _image) {
 	{
 		return player_y;
 	};
+
+	this.getWidth = function()
+	{
+		return player_width;
+	};
+
+	this.getHeight = function()
+	{
+		return player_height;
+	};
+
+	this.getHit = function()
+	{
+		if(ok_to_get_hit === false)
+		{
+			return;
+		}
+
+		player_health --;
+		ok_to_get_hit = false;
+
+		setTimeout(function()
+		{
+			ok_to_get_hit = true;
+		}, 500);
+	};
+
+	this.getHealth = function()
+	{
+		return player_health;
+	};
+
+	// -----------------------------------------------------------------------
 
 	var drawPlayer = function()
 	{

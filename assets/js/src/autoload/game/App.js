@@ -14,7 +14,7 @@ Game.App = function() {
 	var player;
 	var enemies              = [];
 
-	var player_health = 5;
+	var player_health = 0;
 
 	this.init = function()
 	{
@@ -35,9 +35,7 @@ Game.App = function() {
 				console.log('Loaded image ' + loaded_images + ' of ' + image_count);
 				if(loaded_images === image_count)
 				{
-					running = true;
-					player = new Game.Modules.Player(canvas, getImage('player_sprite'));
-					player.init();
+					startGame();
 				}
 			};
 		}
@@ -70,6 +68,14 @@ Game.App = function() {
 
 	// -----------------------------------------------------------------------
 
+
+	var startGame = function()
+	{
+		running = true;
+		player = new Game.Modules.Player(canvas, getImage('player_sprite'));
+		player.init();
+	};
+
 	var resetCanvas = function()
 	{
 		context.clearRect(0, 0, canvas.width, canvas.height);
@@ -82,6 +88,12 @@ Game.App = function() {
 		for(var i in enemies)
 		{
 			enemies[i].onFrame();
+		}
+
+		if(player.getHealth() < 1)
+		{
+			gameOver();
+			return false;
 		}
 
 		drawHealth();
@@ -145,12 +157,18 @@ Game.App = function() {
 	{
 		var heart_x = 10;
 		var heart_y = 10;
-		var hearts = player_health;
+		var hearts = player.getHealth();
 		while(hearts --)
 		{
 			context.drawImage(getImage('heart'), 0, 0, 28, 28, heart_x, heart_y, 28, 28);
 			heart_x += 35;
 		}
+	};
+
+	var gameOver = function()
+	{
+		running = false;
+		alert('GAME OVER LOL');
 	};
 
 };
