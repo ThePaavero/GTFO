@@ -53,6 +53,16 @@ Game.Modules.Player = function(_canvas, _image) {
 		drawPlayer();
 	};
 
+	this.getX = function()
+	{
+		return player_x;
+	};
+
+	this.getY = function()
+	{
+		return player_y;
+	};
+
 	var drawPlayer = function()
 	{
 		var left_wall = 0;

@@ -2,16 +2,23 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	var self = this;
 
-	var canvas = _canvas;
-	var image = _image;
-	var context = canvas.getContext('2d');
+	var canvas        = _canvas;
+	var image         = _image;
+	var context       = canvas.getContext('2d');
+	var enemy_speed_x = 1;
+	var enemy_speed_y = 1;
+	var enemy_width   = 24;
+	var enemy_height  = 36;
 
 	var coords = {
 		x: 0,
 		y: 0
 	};
 
-	var following_interval = 4000;
+	var heading_to_x = 0;
+	var heading_to_y = 0;
+
+	var following_interval = 1000;
 
 	var target;
 
@@ -37,7 +44,12 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	this.followTarget = function()
 	{
 		console.log('Enemy refollowing target');
-		// TODO
+
+		var x = target.getX();
+		var y = target.getY();
+
+		heading_to_x = x;
+		heading_to_y = y;
 
 		setTimeout(function()
 		{
@@ -47,7 +59,28 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.onFrame = function()
 	{
-		//
+		var target_x = heading_to_x;
+		var target_y = heading_to_y;
+
+		if(target_x < coords.x)
+		{
+			coords.x -= enemy_speed_x;
+		}
+		else if(target_x > coords.x)
+		{
+			coords.x += enemy_speed_x;
+		}
+
+		if(target_y < coords.y)
+		{
+			coords.y -= enemy_speed_y;
+		}
+		else if(target_y > coords.y)
+		{
+			coords.y += enemy_speed_y;
+		}
+
+		context.drawImage(image, 0, 0, enemy_width, enemy_height, coords.x, coords.y, enemy_width, enemy_height);
 	};
 
 };
