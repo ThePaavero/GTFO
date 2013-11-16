@@ -4,6 +4,7 @@ Game.App = function() {
 	var canvas;
 	var context;
 	var images = [
+		'assets/img/splash.png',
 		'assets/img/player_sprite.png',
 		'assets/img/enemy_sprite.png',
 		'assets/img/heart.png'
@@ -59,6 +60,8 @@ Game.App = function() {
 		resetCanvas();
 		drawCanvas();
 
+		window.game_running = running;
+
 		if(show_fps)
 		{
 			var fps = countFPS();
@@ -71,9 +74,17 @@ Game.App = function() {
 
 	var startGame = function()
 	{
-		running = true;
-		player = new Game.Modules.Player(canvas, getImage('player_sprite'));
-		player.init();
+		context.drawImage(getImage('splash'), 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+
+		Mousetrap.bind('space', function()
+		{
+			Mousetrap.unbind('space');
+
+			running = true;
+			player = new Game.Modules.Player(canvas, getImage('player_sprite'));
+			player.init();
+		});
+
 	};
 
 	var resetCanvas = function()

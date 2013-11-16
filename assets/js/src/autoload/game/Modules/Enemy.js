@@ -51,6 +51,11 @@ Game.Modules.Enemy = function(_canvas, _image) {
 		heading_to_x = x;
 		heading_to_y = y;
 
+		if(window.game_running === false)
+		{
+			return;
+		}
+
 		setTimeout(function()
 		{
 			self.followTarget();
@@ -59,6 +64,11 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.onFrame = function()
 	{
+		if(window.game_running === false)
+		{
+			return;
+		}
+
 		var target_x = heading_to_x;
 		var target_y = heading_to_y;
 
