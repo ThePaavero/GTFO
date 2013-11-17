@@ -114,7 +114,7 @@ Game.App = function() {
 
 		var player_orientation_x = player.getOrientationX();
 
-		var reach = 10;
+		var reach = 5;
 
 		var player_left   = 0;
 		var player_right  = 0;
@@ -159,16 +159,16 @@ Game.App = function() {
 				)
 			)
 			{
-				hitEnemy(enemies[i], i);
+				hitEnemy(enemies[i], i, player_orientation_x);
 			}
 		}
 	};
 
-	var hitEnemy = function(enemy, key)
+	var hitEnemy = function(enemy, key, player_orientation_x)
 	{
-		enemy.getHit();
+		enemy.getHit(player_orientation_x);
 
-		console.log('RIGHT IN THE KISSER');
+		console.log('☻ RIGHT IN THE KISSER');
 
 		if(enemy.getHealth() < 1)
 		{

@@ -5,6 +5,8 @@ Game.Modules.Player = function(_canvas, _image) {
 	var context       = canvas.getContext('2d');
 	var ok_to_get_hit = true;
 
+	var godmode = false;
+
 	var punch_callback;
 	var kick_callback;
 
@@ -14,9 +16,10 @@ Game.Modules.Player = function(_canvas, _image) {
 	var pixel_size = Game.Settings.pixel_size;
 
 	var player_coords = {
-		'idle' : { x: 0, y: 0 },
-		'punch': { x: 76, y: 0 },
-		'kick' : { x: 121, y: 0 }
+		'idle'   : { x: 0, y: 0 },
+		'punch'  : { x: 76, y: 0 },
+		'kick'   : { x: 121, y: 0 },
+		'hurting': { x: 235, y: 0 }
 	};
 
 	var player_health = 15;
@@ -77,19 +80,23 @@ Game.Modules.Player = function(_canvas, _image) {
 		return player_height;
 	};
 
-	this.getHit = function()
+	this.getHit = function(enemy_orientation_x)
 	{
-		if(ok_to_get_hit === false)
+		if(ok_to_get_hit === false || godmode === true)
 		{
 			return;
 		}
 
 		player_health --;
 		ok_to_get_hit = false;
+		player_action.hurting = true;
+
+		player_x += enemy_orientation_x === 'left' ? -20 : 20;
 
 		setTimeout(function()
 		{
 			ok_to_get_hit = true;
+			player_action.hurting = false;
 		}, 500);
 	};
 
@@ -176,6 +183,11 @@ Game.Modules.Player = function(_canvas, _image) {
 		if(player_action.kick)
 		{
 			state = 'kick';
+			idling = false;
+		}
+		if(player_action.hurting)
+		{
+			state = 'hurting';
 			idling = false;
 		}
 
@@ -282,11 +294,6 @@ Game.Modules.Player = function(_canvas, _image) {
 
 	var attack = function()
 	{
-		/*if(player_action.attack === true)
-		{
-			return false;
-		}*/
-
 		if(player_move.right || player_move.left || player_move.up || player_move.down)
 		{
 			punch();
@@ -298,30 +305,34 @@ Game.Modules.Player = function(_canvas, _image) {
 
 	var punch = function()
 	{
+		player_action.punch = false;
+
 		clearTimeout(attack_stop_timeout);
 
+		player_action.kick = false;
 		player_action.punch = true;
-		player_x += (player_orientation_x === 'left' ? (pixel_size * 1) : (pixel_size * -3));
 
 		attack_stop_timeout = setTimeout(function()
 		{
 			player_action.punch = false;
-		}, 200);
+		}, 100);
 
 		punch_callback();
 	};
 
 	var kick = function()
 	{
+		player_action.kick = false;
+
 		clearTimeout(attack_stop_timeout);
 
+		player_action.punch = false;
 		player_action.kick = true;
-		player_x += (player_orientation_x === 'left' ? (pixel_size * -1) : (pixel_size));
 
 		attack_stop_timeout = setTimeout(function()
 		{
 			player_action.kick = false;
-		}, 350);
+		}, 100);
 
 		kick_callback();
 	};

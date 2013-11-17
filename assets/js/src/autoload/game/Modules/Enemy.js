@@ -7,8 +7,14 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	var image         = _image;
 	var context       = canvas.getContext('2d');
 	var health        = 3;
-	var enemy_speed_x = 1;
-	var enemy_speed_y = 1;
+
+	var enemy_speed_x_original = 1;
+	var enemy_speed_x = enemy_speed_x_original;
+
+	var enemy_speed_y_original = 1;
+	var enemy_speed_y = enemy_speed_y_original;
+	var enemy_orientation_x = 'right';
+
 	var enemy_width   = 24;
 	var enemy_height  = 36;
 
@@ -31,8 +37,19 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.spawnRandomOutside = function()
 	{
-		var x = Math.round((Math.random() * 30) * -1);
-		var y = Math.round((Math.random() * 30) * -1);
+		var above_or_under = Math.round(Math.random()) === 0 ? 'above' : 'under';
+
+		var x = Math.round((Math.random() * canvas.width));
+		var y = 0;
+
+		if(above_or_under === 'above')
+		{
+			y = Math.round((Math.random() * 30) * -1);
+		}
+		else
+		{
+			y = Math.round(Math.random() * 30) + canvas.height;
+		}
 
 		coords.x = x;
 		coords.y = y;
@@ -64,33 +81,41 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.onFrame = function()
 	{
-		if(window.game_running === false || alive === false)
+		if(window.game_running && alive)
 		{
-			return;
+			var target_x = heading_to_x;
+			var target_y = heading_to_y;
+
+			if(target_x < coords.x)
+			{
+				coords.x -= enemy_speed_x;
+				enemy_orientation_x = 'left';
+			}
+			else if(target_x > coords.x)
+			{
+				coords.x += enemy_speed_x;
+				enemy_orientation_x = 'right';
+			}
+
+			if(target_y < coords.y)
+			{
+				coords.y -= enemy_speed_y;
+			}
+			else if(target_y > coords.y)
+			{
+				coords.y += enemy_speed_y;
+			}
 		}
 
-		var target_x = heading_to_x;
-		var target_y = heading_to_y;
+		var sprite_x = 0;
+		var sprite_y = 0;
 
-		if(target_x < coords.x)
+		if(enemy_orientation_x === 'left')
 		{
-			coords.x -= enemy_speed_x;
-		}
-		else if(target_x > coords.x)
-		{
-			coords.x += enemy_speed_x;
+			sprite_y = 48;
 		}
 
-		if(target_y < coords.y)
-		{
-			coords.y -= enemy_speed_y;
-		}
-		else if(target_y > coords.y)
-		{
-			coords.y += enemy_speed_y;
-		}
-
-		context.drawImage(image, 0, 0, enemy_width, enemy_height, coords.x, coords.y, enemy_width, enemy_height);
+		context.drawImage(image, sprite_x, sprite_y, enemy_width, enemy_height, coords.x, coords.y, enemy_width, enemy_height);
 
 		checkForTargetHit();
 	};
@@ -120,9 +145,23 @@ Game.Modules.Enemy = function(_canvas, _image) {
 		return health;
 	};
 
-	this.getHit = function()
+	this.getHit = function(player_orientation_x)
 	{
+		if( ! alive)
+		{
+			return;
+		}
+
 		health --;
+
+		var bounce = player_orientation_x === 'left' ? -20 : 20;
+		coords.x += bounce;
+
+		setTimeout(function()
+		{
+			enemy_speed_x = enemy_speed_x_original;
+			console.log('Speed X returned to original');
+		}, 800);
 
 		// Get stunned for a while
 		alive = false;
@@ -149,8 +188,8 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 		if((my_x >= target_x && my_x <= target_x + target.getWidth()) && (my_y >= target_y && my_y <= target_y + target.getHeight()))
 		{
-			console.log('HIT');
-			target.getHit();
+			console.log('Player gets hit');
+			target.getHit(enemy_orientation_x);
 		}
 	};
 
