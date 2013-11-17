@@ -4,6 +4,7 @@ Game.Modules.Player = function(_canvas, _image) {
 	var image         = _image;
 	var context       = canvas.getContext('2d');
 	var ok_to_get_hit = true;
+	var ok_to_attack  = true;
 
 	var godmode = false;
 
@@ -234,7 +235,11 @@ Game.Modules.Player = function(_canvas, _image) {
 		Mousetrap.bind('s', moveDown, 'keydown');
 		Mousetrap.bind('s', stopDown, 'keyup');
 
-		Mousetrap.bind('space', attack);
+		Mousetrap.bind('space', attack, 'keydown');
+		Mousetrap.bind('space', function()
+		{
+			ok_to_attack = true;
+		}, 'keyup');
 	};
 
 	var moveLeft = function()
@@ -294,6 +299,13 @@ Game.Modules.Player = function(_canvas, _image) {
 
 	var attack = function()
 	{
+		if(ok_to_attack === false)
+		{
+			return;
+		}
+
+		ok_to_attack = false;
+
 		if(player_move.right || player_move.left || player_move.up || player_move.down)
 		{
 			punch();

@@ -15,6 +15,7 @@ Game.App = function() {
 	var player;
 	var enemies              = [];
 	var points               = 0;
+	var enemy_speed          = 1;
 
 	this.init = function()
 	{
@@ -233,7 +234,7 @@ Game.App = function() {
 		}
 
 		console.log('Spawning enemy');
-		var enemy = new Game.Modules.Enemy(canvas, getImage('enemy_sprite'));
+		var enemy = new Game.Modules.Enemy(canvas, getImage('enemy_sprite'), enemy_speed);
 		enemy.init();
 
 		enemy.spawnRandomOutside();
@@ -241,6 +242,16 @@ Game.App = function() {
 		enemy.followTarget();
 
 		enemies.push(enemy);
+
+		if(enemy_spawn_interval > 300)
+		{
+			enemy_spawn_interval -= 200;
+			console.log(enemy_spawn_interval);
+		}
+		if(enemy_speed < 4)
+		{
+			enemy_speed += 0.1;
+		}
 	};
 
 	var drawHealth = function()

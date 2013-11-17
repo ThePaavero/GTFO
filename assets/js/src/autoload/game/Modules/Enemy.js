@@ -1,4 +1,5 @@
-Game.Modules.Enemy = function(_canvas, _image) {
+
+Game.Modules.Enemy = function(_canvas, _image, _enemy_speed) {
 
 	var self  = this;
 	var alive = true;
@@ -7,11 +8,12 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	var image         = _image;
 	var context       = canvas.getContext('2d');
 	var health        = 3;
+	var enemy_speed = _enemy_speed;
 
-	var enemy_speed_x_original = 1;
+	var enemy_speed_x_original = enemy_speed;
 	var enemy_speed_x = enemy_speed_x_original;
 
-	var enemy_speed_y_original = 1;
+	var enemy_speed_y_original = enemy_speed;
 	var enemy_speed_y = enemy_speed_y_original;
 	var enemy_orientation_x = 'right';
 
