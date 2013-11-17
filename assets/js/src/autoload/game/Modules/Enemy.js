@@ -123,7 +123,6 @@ Game.Modules.Enemy = function(_canvas, _image) {
 	this.getHit = function()
 	{
 		health --;
-		return health < 1;
 
 		// Get stunned for a while
 		alive = false;

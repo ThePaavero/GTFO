@@ -4,6 +4,7 @@ Game.Settings = {};
 Game.App      = {};
 Game.Modules  = {};
 Game.Helpers  = {};
+Game.Globals  = {};
 
 /**
  * The entire "framework"

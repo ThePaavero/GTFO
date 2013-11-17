@@ -15,8 +15,6 @@ Game.App = function() {
 	var player;
 	var enemies              = [];
 
-	var player_health = 0;
-
 	this.init = function()
 	{
 		console.log('Game starting...');
@@ -75,6 +73,8 @@ Game.App = function() {
 		drawHealth();
 
 		window.game_running = running;
+		window.Game.Globals.canvas = canvas;
+		window.Game.Globals.context = context;
 
 		if(show_fps)
 		{
@@ -114,6 +114,16 @@ Game.App = function() {
 
 		var player_orientation_x = player.getOrientationX();
 
+		var reach = 10;
+
+		var player_left   = 0;
+		var player_right  = 0;
+		var player_top    = 0;
+		var player_bottom = 0;
+
+		player_top = player_y;
+		player_bottom = player_y + player.getHeight();
+
 		// Any enemies getting hit?
 		for(var i in enemies)
 		{
@@ -122,19 +132,32 @@ Game.App = function() {
 			var enemy_width  = enemies[i].getWidth();
 			var enemy_height = enemies[i].getHeight();
 
-			var reach = 20;
+			var attack_point = null;
 
-			// Do offset according to player orientation x
+			player_left = player_x - reach;
+			player_right = (player_x + player.getWidth()) + reach;
+
 			if(player_orientation_x === 'left')
 			{
-				player_x -= player.getWidth();
+				attack_point_x = player_left + reach;
 			}
 			else
 			{
-				player_x += player.getWidth();
+				attack_point_x = player_right + reach;
 			}
 
-			if((player_x >= enemy_x && player_x <= enemy_x + enemy_width) && (player_y >= enemy_y && player_y <= enemy_y + enemy_height))
+			var attack_point_y = player_top + 5;
+			var attack_spread = 12;
+
+			if(
+				(
+					enemy_x > attack_point_x - attack_spread &&
+					enemy_x < attack_point_x + attack_spread
+				) && (
+					enemy_y > attack_point_y - (attack_spread*2) &&
+					enemy_y < attack_point_y + (attack_spread*2)
+				)
+			)
 			{
 				hitEnemy(enemies[i], i);
 			}

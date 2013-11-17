@@ -19,7 +19,7 @@ Game.Modules.Player = function(_canvas, _image) {
 		'kick' : { x: 121, y: 0 }
 	};
 
-	var player_health = 5;
+	var player_health = 15;
 
 	var player_x = 100;
 	var player_y = 80;
