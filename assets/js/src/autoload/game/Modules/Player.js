@@ -23,7 +23,7 @@ Game.Modules.Player = function(_canvas, _image) {
 		'hurting': { x: 235, y: 0 }
 	};
 
-	var player_health = 15;
+	var player_health = 4;
 
 	var player_x = 100;
 	var player_y = 80;

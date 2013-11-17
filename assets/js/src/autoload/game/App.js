@@ -1,10 +1,12 @@
 Game.App = function() {
 
 	var running = false;
+	var game_over = false;
 	var canvas;
 	var context;
 	var images = [
 		'assets/img/splash.png',
+		'assets/img/game_over.png',
 		'assets/img/player_sprite.png',
 		'assets/img/enemy_sprite.png',
 		'assets/img/heart.png'
@@ -52,6 +54,12 @@ Game.App = function() {
 
 	this.onFrame = function()
 	{
+		if(game_over === true)
+		{
+			showGameOverScreen();
+			return;
+		}
+
 		if( ! running)
 		{
 			return;
@@ -177,7 +185,7 @@ Game.App = function() {
 
 		if(enemy.getHealth() < 1)
 		{
-			// die, motherfucker
+			// Die, motherfucker
 			points += 100;
 			console.log('LOL DEAD');
 			enemy.die();
@@ -279,7 +287,13 @@ Game.App = function() {
 	var gameOver = function()
 	{
 		running = false;
+		game_over = true;
 		console.log('GAME OVER LOL');
+	};
+
+	var showGameOverScreen = function()
+	{
+		context.drawImage(getImage('game_over'), 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
 	};
 
 };

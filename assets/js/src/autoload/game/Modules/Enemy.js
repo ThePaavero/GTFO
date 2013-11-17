@@ -107,6 +107,10 @@ Game.Modules.Enemy = function(_canvas, _image, _enemy_speed) {
 			{
 				coords.y += enemy_speed_y;
 			}
+
+			// Some jitter plz
+			coords.x += randomFromInterval(-1, 1);
+			coords.y += randomFromInterval(-1, 1);
 		}
 
 		var sprite_x = 0;
