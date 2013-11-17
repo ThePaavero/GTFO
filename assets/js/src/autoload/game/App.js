@@ -14,6 +14,7 @@ Game.App = function() {
 	var enemy_spawn_interval = 5000;
 	var player;
 	var enemies              = [];
+	var points               = 0;
 
 	this.init = function()
 	{
@@ -71,6 +72,7 @@ Game.App = function() {
 		}
 
 		drawHealth();
+		drawPoints();
 
 		window.game_running = running;
 		window.Game.Globals.canvas = canvas;
@@ -170,9 +172,12 @@ Game.App = function() {
 
 		console.log('☻ RIGHT IN THE KISSER');
 
+		points += 10;
+
 		if(enemy.getHealth() < 1)
 		{
 			// die, motherfucker
+			points += 100;
 			console.log('LOL DEAD');
 			enemy.die();
 			enemies.splice(key, 1);
@@ -248,6 +253,16 @@ Game.App = function() {
 			context.drawImage(getImage('heart'), 0, 0, 28, 28, heart_x, heart_y, 28, 28);
 			heart_x += 35;
 		}
+	};
+
+	var drawPoints = function()
+	{
+		var points_x = 600;
+		var points_y = 33;
+
+		context.font = '30pt "silkscreennormal"';
+		context.fillStyle = 'white';
+		context.fillText(points + ' pts', points_x, points_y);
 	};
 
 	var gameOver = function()

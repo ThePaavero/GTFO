@@ -173,6 +173,7 @@ Game.Modules.Enemy = function(_canvas, _image) {
 
 	this.die = function()
 	{
+		sprite_x = 61;
 		alive = false;
 	};
 
