@@ -17,7 +17,7 @@ $(function()
 	var gameLoop = function()
 	{
 		game.onFrame();
-		requestAnimationFrame(gameLoop);
+		window.requestAnimationFrame(gameLoop);
 	};
 
 	// -----------------------------------------------------------------------

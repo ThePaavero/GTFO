@@ -9,7 +9,9 @@ Game.App = function() {
 		'assets/img/game_over.png',
 		'assets/img/player_sprite.png',
 		'assets/img/enemy_sprite.png',
-		'assets/img/heart.png'
+		'assets/img/heart.png',
+		'assets/img/overlay.png',
+		'assets/img/bomb.png'
 	];
 	var pixel_size           = Game.Settings.pixel_size;
 	var show_fps             = true;
@@ -18,6 +20,8 @@ Game.App = function() {
 	var enemies              = [];
 	var points               = 0;
 	var enemy_speed          = 1;
+
+	var self = this;
 
 	this.init = function()
 	{
@@ -57,6 +61,7 @@ Game.App = function() {
 		if(game_over === true)
 		{
 			showGameOverScreen();
+			drawOverlay();
 			return;
 		}
 
@@ -87,6 +92,8 @@ Game.App = function() {
 		window.Game.Globals.canvas = canvas;
 		window.Game.Globals.context = context;
 
+		drawOverlay();
+
 		if(show_fps)
 		{
 			var fps = countFPS();
@@ -94,12 +101,20 @@ Game.App = function() {
 		}
 	};
 
-	// -----------------------------------------------------------------------
+	this.getImage = function(name)
+	{
+		var img = new Image();
+		img.src = 'assets/img/' + name + '.png';
+		return img;
+	};
 
+	// -----------------------------------------------------------------------
 
 	var startGame = function()
 	{
 		context.drawImage(getImage('splash'), 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+
+		drawOverlay();
 
 		Mousetrap.bind('space', function()
 		{
@@ -224,9 +239,7 @@ Game.App = function() {
 
 	var getImage = function(name)
 	{
-		var img = new Image();
-		img.src = 'assets/img/' + name + '.png';
-		return img;
+		return self.getImage(name);
 	};
 
 	var spawnEnemies = function()
@@ -282,6 +295,11 @@ Game.App = function() {
 		context.font = '30pt "silkscreennormal"';
 		context.fillStyle = 'white';
 		context.fillText(points + ' pts', points_x, points_y);
+	};
+
+	var drawOverlay = function()
+	{
+		context.drawImage(getImage('overlay'), 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
 	};
 
 	var gameOver = function()

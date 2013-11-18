@@ -35,6 +35,8 @@ Game.Modules.Player = function(_canvas, _image) {
 		'right': 3
 	};
 
+	var bombs = [];
+
 	player_orientation_x = 'right';
 	player_orientation_y = 'down';
 
@@ -54,11 +56,13 @@ Game.Modules.Player = function(_canvas, _image) {
 	{
 		this.blink();
 		doKeys();
+		doMouse();
 	};
 
 	this.onFrame = function()
 	{
 		drawPlayer();
+		drawBombs();
 	};
 
 	this.getX = function()
@@ -221,6 +225,24 @@ Game.Modules.Player = function(_canvas, _image) {
 		context.drawImage(image, coord_x, coord_y, player_width, player_height, player_x, player_y, player_width, player_height);
 	};
 
+	var drawBombs = function()
+	{
+		if(bombs.length < 1)
+		{
+			return;
+		}
+
+		for(var i in bombs)
+		{
+			bombs[i].draw();
+			if(bombs[i].hasExploded())
+			{
+				// Garbage collecting
+				bombs.splice(i, 1);
+			}
+		}
+	};
+
 	var doKeys = function()
 	{
 		Mousetrap.bind('a', moveLeft, 'keydown');
@@ -240,6 +262,23 @@ Game.Modules.Player = function(_canvas, _image) {
 		{
 			ok_to_attack = true;
 		}, 'keyup');
+	};
+
+	var doMouse = function()
+	{
+		var layer = $(canvas);
+		layer.on('click', function(e)
+		{
+			e.preventDefault();
+			var native_x = e.clientX;
+			var native_y = e.clientY;
+			var relative_x = native_x - layer.offset().left;
+			var relative_y = native_y - layer.offset().top;
+
+			throwBomb(relative_x, relative_y);
+
+			return false;
+		});
 	};
 
 	var moveLeft = function()
@@ -347,6 +386,29 @@ Game.Modules.Player = function(_canvas, _image) {
 		}, 100);
 
 		kick_callback();
+	};
+
+	var throwBomb = function(x, y)
+	{
+		if( ! Game.Settings.bombs)
+		{
+			return;
+		}
+
+		console.log('Throwing bomb at X: ' + x + ' Y: ' + y);
+
+		var data = {
+			from_x :  player_x,
+			from_y :  player_y,
+			to_x   :  x,
+			to_y   :  y
+		};
+
+		var image = window.gameGlobal.getImage('bomb');
+		var bomb = new Game.Modules.Bomb(canvas, image, data);
+		bomb.init();
+
+		bombs.push(bomb);
 	};
 
 };

@@ -122,6 +122,7 @@ body {
     -webkit-filter: blur(0.6px);
     border: solid 2px #fff; }
   #game .overlay {
+    display: none;
     width: 900px;
     height: 350px;
     z-index: 20;
